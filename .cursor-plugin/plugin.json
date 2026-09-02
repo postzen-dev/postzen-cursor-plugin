@@ -1,0 +1,38 @@
+{
+  "name": "postzen",
+  "displayName": "PostZen",
+  "version": "1.0.0",
+  "description": "Schedule and publish social media posts across X, Instagram, TikTok, LinkedIn, Facebook, YouTube, Threads, Pinterest, Bluesky, and Telegram, manage posting queues, and pull analytics.",
+  "author": {
+    "name": "PostZen"
+  },
+  "homepage": "https://www.postzen.dev",
+  "repository": "https://github.com/postzen-dev/postzen-cursor-plugin",
+  "license": "MIT",
+  "logo": "assets/logo.png",
+  "keywords": [
+    "postzen",
+    "social media",
+    "scheduling",
+    "publishing",
+    "x",
+    "twitter",
+    "instagram",
+    "tiktok",
+    "linkedin",
+    "youtube",
+    "pinterest",
+    "bluesky",
+    "analytics",
+    "mcp"
+  ],
+  "category": "integrations",
+  "tags": [
+    "postzen",
+    "social",
+    "marketing",
+    "mcp"
+  ],
+  "mcpServers": "./mcp.json",
+  "skills": "./skills/"
+}
