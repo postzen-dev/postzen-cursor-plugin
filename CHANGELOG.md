@@ -2,6 +2,10 @@
 
 All notable changes to this plugin will be documented here.
 
+## 1.2.0 — OpenAI Codex plugin
+
+- Added the OpenAI Codex plugin (`postzen-dev/postzen-codex-plugin`): same hosted MCP server and four skills, packaged in the `.codex-plugin/plugin.json` format. No changes for other hosts.
+
 ## 1.1.0 — generated from the unified source repository
 
 - The plugin is now generated from `postzen-dev/postzen-plugins`, with no functional changes.
