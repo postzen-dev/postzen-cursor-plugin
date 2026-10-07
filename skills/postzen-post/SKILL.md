@@ -18,12 +18,13 @@ Publish or schedule the user's content using the PostZen MCP tools provided by t
    - **Pinterest**: pins need a board; the account's default board is used unless the user picks one (`getPinterestBoards` / `listPinterestBoardsForSelection`).
    - **Bluesky**: 300 chars.
    - Platform value strings: `x` (alias `twitter`), `instagram`, `tiktok`, `linkedin`, `facebook`, `youtube`, `threads`, `pinterest`, `bluesky`, `telegram`.
-3. **Handle media.** For local files, call `createMediaPresign`, upload the file with an HTTP `PUT` to the returned `uploadUrl`, then reference the returned `publicUrl` in the post's `mediaItems`. Already-hosted public URLs can be referenced directly.
+3. **Handle media.** For local files, call `createMediaPresign`, upload the file with an HTTP `PUT` to the returned `uploadUrl`, then reference the returned `publicUrl` in the post's `mediaItems`. Already-hosted public URLs can be referenced directly (direct image/video file URLs up to 100 MB; Drive/Dropbox-style share links return HTML and fail).
 4. **Choose the timing — exactly one of:**
    - `publishNow: true` — publishes immediately.
-   - `scheduledFor` — ISO-8601 UTC, at least 60 seconds in the future. If the user gave a local time, convert to UTC and confirm the conversion.
+   - `scheduledFor` — an ISO 8601 date-time at least 60 seconds in the future. Any offset is accepted (`2026-10-07T09:00:00-06:00` or `...Z`), so send the user's local time with its offset rather than converting by hand, and echo back the resolved time with its timezone.
    - `isDraft: true` — saves without publishing.
-   - Queue: if the user says "add to queue" or gives no time preference for a scheduled post, pass `queuedFromProfile` (the profile id) on `createPost` instead of `scheduledFor` — PostZen claims the next free slot atomically and returns it. Never fetch `getNextQueueSlot` and pass its time as `scheduledFor` (the slot isn't reserved, so it can race); use it only to tell the user when their post would go out. `getBestTimeToPost` suggests data-driven times for non-queue scheduling.
+   - `queuedFromProfile` (the profile id), optionally with `queueId` for a non-default queue: if the user says "add to queue" or gives no time preference for a scheduled post, pass this instead of `scheduledFor` — PostZen claims the next free slot atomically and returns it as the post's `scheduledFor`. The profile must have a queue with slots. Never fetch `getNextQueueSlot` and pass its time as `scheduledFor` (the slot isn't reserved, so it can race); use it only to tell the user when their post would go out. `getBestTimeToPost` suggests data-driven times for non-queue scheduling.
+   - Combining modes is a 400: `queuedFromProfile` with `publishNow`, `scheduledFor`, or `isDraft`; `publishNow` with `scheduledFor` or `isDraft`; `queueId` without `queuedFromProfile`.
 5. **Confirm before publishing.** Show the final per-platform content and timing and get an explicit yes before calling `createPost` with `publishNow` or a near-term `scheduledFor`. Drafts don't need confirmation.
 6. **Create the post** with `createPost`: `content`, `platforms: [{ platform, accountId }, ...]`, optional `mediaItems`, and the timing field. Report back the post `_id`, status, and scheduled time.
 

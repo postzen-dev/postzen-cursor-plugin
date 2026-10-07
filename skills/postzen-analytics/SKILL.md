@@ -13,12 +13,12 @@ Produce a readable performance summary for the user's connected social accounts 
 1. **Scope it.** Call `listAccounts` to see connected accounts. If the user didn't specify platforms or a time range, default to all accounts over the last 7 days and say so in the report.
 2. **Pull the data** (parallel calls where independent):
    - `getAnalytics` — per-post engagement metrics for the period.
-   - `getDailyMetrics` — day-by-day account-level metrics (impressions, engagement).
+   - `getDailyMetrics` — daily aggregates of post metrics (impressions, engagement) with a per-platform breakdown. By default (`attribution: "publish"`) each post's lifetime metrics land on its publish date; `attribution: "received"` puts daily deltas on the day they were observed. These are not account-level insights — the only account-level series PostZen has is follower count.
    - `getFollowerStats` — follower counts and growth.
    - `listPosts` — recently published posts, to tie metrics back to actual content.
    - Optionally `syncExternalPosts` first if the user posts outside PostZen and wants those included.
-3. **Synthesize, don't dump.** Lead with the headline (best-performing post, follower trend direction, notable spikes or drops). Then a short per-platform breakdown. Quote actual numbers with their period. Call out anything actionable — e.g. a content type that consistently outperforms, or a platform going stale.
-4. **Close with timing guidance** if relevant: `getBestTimeToPost` gives data-driven posting-time suggestions per account; mention the top slots.
+3. **Synthesize, don't dump.** Lead with the headline (best-performing post, follower trend direction, notable spikes or drops — a spike in `getDailyMetrics` under publish attribution means posts published that day did well, not that the account got more traffic that day). Then a short per-platform breakdown. Quote actual numbers with their period. Call out anything actionable — e.g. a content type that consistently outperforms, or a platform going stale.
+4. **Close with timing guidance** if relevant: `getBestTimeToPost` gives data-driven posting-time suggestions per account; mention the top slots. Its hours are UTC — convert to the user's timezone — and show each slot's `post_count`, since a slot backed by one post can rank first.
 
 ## Notes
 
